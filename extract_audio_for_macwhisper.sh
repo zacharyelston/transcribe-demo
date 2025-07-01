@@ -8,12 +8,13 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LIB_DIR="${SCRIPT_DIR}/lib"
 CONFIG_DIR="${SCRIPT_DIR}/config"
 OUTPUT_DIR="${SCRIPT_DIR}/output"
+LOG_FILE="${SCRIPT_DIR}/log.txt"
 
 # Load utilities
 if [ -f "${LIB_DIR}/utils.sh" ]; then
     source "${LIB_DIR}/utils.sh"
 else
-    echo "Error: Utilities not found at ${LIB_DIR}/utils.sh"
+    echo "Error: Utilities not found at ${LIB_DIR}/utils.sh" >&2
     exit 1
 fi
 
@@ -61,10 +62,10 @@ main() {
     local audio_file="$dest_dir/${basename}_audio.wav"
     
     # Extract audio
-    log_message "INFO" "Extracting audio from $input_file..."
+    log_message "INFO" "Extracting audio from $input_file..." >> "$LOG_FILE"
     
     $VLC_PATH -I dummy "$input_file" \
-        --sout "#transcode{acodec=$AUDIO_FORMAT,channels=$AUDIO_CHANNELS,samplerate=$AUDIO_SAMPLE_RATE}:std{access=file,mux=wav,dst='$audio_file'}" \
+        --sout "#transcode{acodec=$AUDIO_FORMAT,channels=$AUDIO_CHANNELS,samplerate=$AUDIO_SAMPLE_RATE,ab=$AUDIO_BITRATE}:std{access=file,mux=wav,dst='$audio_file'}" \
         vlc://quit
     
     # Wait for VLC to finish
@@ -72,24 +73,24 @@ main() {
     
     # Check if audio file was created
     if [ ! -f "$audio_file" ]; then
-        log_message "ERROR" "Failed to extract audio"
+        log_message "ERROR" "Failed to extract audio" >> "$LOG_FILE"
         exit 1
     fi
     
-    log_message "INFO" "Audio extracted successfully: $audio_file"
-    log_message "INFO" "You can now open MacWhisper and drag this file for transcription."
+    log_message "INFO" "Audio extracted successfully: $audio_file" >> "$LOG_FILE"
+    log_message "INFO" "You can now open MacWhisper and drag this file for transcription." >> "$LOG_FILE"
     
     # Try to open MacWhisper with the audio file
     if [ -d "$MACWHISPER_PATH" ]; then
-        log_message "INFO" "Opening MacWhisper with the audio file..."
+        log_message "INFO" "Opening MacWhisper with the audio file..." >> "$LOG_FILE"
         open -a MacWhisper "$audio_file"
     else
-        log_message "WARNING" "MacWhisper not found at $MACWHISPER_PATH"
-        log_message "INFO" "You can open MacWhisper manually and drag the audio file."
+        log_message "WARNING" "MacWhisper not found at $MACWHISPER_PATH" >> "$LOG_FILE"
+        log_message "INFO" "You can open MacWhisper manually and drag the audio file." >> "$LOG_FILE"
     fi
     
     return 0
 }
 
 # Run the main function
-main "$@"
+main "$@" || exit $?

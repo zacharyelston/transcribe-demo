@@ -4,6 +4,7 @@
 # Ensure the lib directory is in the path
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
+LOG_FILE="${PROJECT_ROOT}/logs/transcription.log"
 
 # Load configuration
 load_config() {
@@ -11,10 +12,10 @@ load_config() {
     
     if [ -f "$config_file" ]; then
         source "$config_file"
-        echo "Loaded configuration from $config_file"
+        log_message "INFO" "Loaded configuration from $config_file"
     else
-        echo "Error: Configuration file not found: $config_file" >&2
-        return 1
+        log_message "ERROR" "Configuration file not found: $config_file"
+        exit 1
     fi
 }
 
@@ -24,25 +25,17 @@ check_command() {
     local package="$2"
     
     if ! command -v "$cmd" &> /dev/null; then
-        echo "Error: '$cmd' command not found" >&2
-        if [ -n "$package" ]; then
-            echo "Please install it using: $package" >&2
-        fi
-        return 1
+        log_message "ERROR" "'$cmd' command not found. Please install it using: $package"
+        exit 1
     fi
-    
-    return 0
 }
 
 # Check if VLC is installed
 check_vlc() {
     if [ ! -f "${VLC_PATH}" ]; then
-        echo "Error: VLC not found at ${VLC_PATH}" >&2
-        echo "Please ensure VLC is installed" >&2
-        return 1
+        log_message "ERROR" "VLC not found at ${VLC_PATH}. Please ensure VLC is installed"
+        exit 1
     fi
-    
-    return 0
 }
 
 # Create directory if it doesn't exist
@@ -52,12 +45,10 @@ ensure_directory() {
     if [ ! -d "$dir" ]; then
         mkdir -p "$dir"
         if [ $? -ne 0 ]; then
-            echo "Error: Could not create directory '$dir'" >&2
-            return 1
+            log_message "ERROR" "Could not create directory '$dir'"
+            exit 1
         fi
     fi
-    
-    return 0
 }
 
 # Check if a file exists
@@ -65,11 +56,9 @@ check_file() {
     local file="$1"
     
     if [ ! -f "$file" ]; then
-        echo "Error: File not found: $file" >&2
-        return 1
+        log_message "ERROR" "File not found: $file"
+        exit 1
     fi
-    
-    return 0
 }
 
 # Extract basename from file path (without extension)
@@ -88,16 +77,16 @@ log_message() {
     
     case "$level" in
         INFO)
-            echo -e "\033[32m[${timestamp}] [INFO] ${message}\033[0m"
+            echo -e "\033[32m[${timestamp}] [INFO] ${message}\033[0m" | tee -a $LOG_FILE
             ;;
         WARNING)
-            echo -e "\033[33m[${timestamp}] [WARNING] ${message}\033[0m"
+            echo -e "\033[33m[${timestamp}] [WARNING] ${message}\033[0m" | tee -a $LOG_FILE
             ;;
         ERROR)
-            echo -e "\033[31m[${timestamp}] [ERROR] ${message}\033[0m" >&2
+            echo -e "\033[31m[${timestamp}] [ERROR] ${message}\033[0m" | tee -a $LOG_FILE >&2
             ;;
         *)
-            echo "[${timestamp}] ${message}"
+            echo "[${timestamp}] ${message}" | tee -a $LOG_FILE
             ;;
     esac
 }
