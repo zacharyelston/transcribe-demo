@@ -1,55 +1,45 @@
-# Video Transcription Tools
+# Transcribe Demo
 
-A collection of command-line scripts for extracting audio from video files and transcribing them using Whisper AI.
+A collection of shell scripts for audio and video transcription with various output formats.
+
+## Features
+
+- Extract audio from video files
+- Transcribe audio to text in multiple formats (SRT, VTT, TXT)
+- Batch processing capability
+- Customizable audio quality settings
+- Optional timestamp generation
+- Detailed logging
 
 ## Scripts
 
-### `transcribe_video.sh`
-
-Extracts audio from a video file and transcribes it using OpenAI's Whisper model.
-
-```bash
-./transcribe_video.sh <input_mp4_file> [destination_directory]
-```
-
-Features:
-- Extracts audio using VLC
-- Transcribes using Whisper AI (base model)
-- Saves both audio and transcript files
-
-### `extract_audio_for_macwhisper.sh`
-
-Extracts audio from a video file for use with the MacWhisper app.
-
-```bash
-./extract_audio_for_macwhisper.sh <input_mp4_file> [destination_directory]
-```
-
-Features:
-- Extracts audio using VLC
-- Formats audio for optimal transcription (16-bit PCM, 16kHz)
-- Automatically opens MacWhisper with the audio file (if installed)
+- `transcribe_video.sh`: Main script for transcribing video files
+- `extract_audio_for_macwhisper.sh`: Helper script to extract audio for processing
+- `lib/utils.sh`: Utility functions and shared code
+- `config/default.conf`: Configuration settings
 
 ## Requirements
 
-- VLC: For audio extraction (`/Applications/VLC.app`)
-- Whisper: For transcription (`pip install openai-whisper`)
-- MacWhisper: Optional GUI app for manual transcription
+- Mac environment
+- VLC for media processing
+- MacWhisper for transcription
 
 ## Installation
 
-1. Clone this repository
-2. Make scripts executable:
+Run the included install script to set up dependencies:
 
 ```bash
-chmod +x transcribe_video.sh extract_audio_for_macwhisper.sh
+./install.sh
 ```
 
-## Potential Improvements
+## Usage
 
-- Add support for more video formats (currently only MP4)
-- Implement batch processing for multiple files
-- Add options for different Whisper models (tiny, small, medium, large)
-- Add language selection options
-- Implement error handling for large files
-- Add timestamp generation in transcripts
+```bash
+./transcribe_video.sh --input video.mp4 --format srt,vtt,txt
+```
+
+See individual script help text for detailed usage information.
+
+## License
+
+MIT
