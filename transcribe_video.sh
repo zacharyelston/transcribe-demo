@@ -92,7 +92,9 @@ main() {
         fi
         
         # Add output formats
-        whisper_args+=("--output_format" "$OUTPUT_FORMATS")
+        for format in "${OUTPUT_FORMATS[@]}"; do
+            whisper_args+=("--output_format" "$format")
+        done
         
         # Add timestamp if specified
         if [ "$TIMESTAMP" -eq 1 ]; then
@@ -106,7 +108,9 @@ main() {
         if [ $? -eq 0 ]; then
             log_message "INFO" "Transcription complete!" "$LOG_FILE"
             log_message "INFO" "Audio file: $audio_file" "$LOG_FILE"
-            log_message "INFO" "Transcript saved to: $dest_dir/${basename}_audio.txt" "$LOG_FILE"
+            for format in "${OUTPUT_FORMATS[@]}"; do
+                log_message "INFO" "Transcript saved to: $dest_dir/${basename}_audio.$format" "$LOG_FILE"
+            done
             
             # Clean up if configured
             if [ "$CLEANUP_TEMP_FILES" -eq 1 ]; then

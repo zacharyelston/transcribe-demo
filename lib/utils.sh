@@ -90,3 +90,58 @@ log_message() {
             ;;
     esac
 }
+
+# Batch process files
+batch_process() {
+    local files=("$@")
+    for file in "${files[@]}"; do
+        transcribe_video "$file"
+    done
+}
+
+# Transcribe video
+transcribe_video() {
+    local file="$1"
+    local format="${2:-srt}"
+    local quality="${3:-high}"
+    local timestamp="${4:-false}"
+    
+    check_file "$file"
+    check_command "ffmpeg" "apt-get install ffmpeg"
+    
+    local basename=$(get_basename "$file")
+    local output="${OUTPUT_DIR}/${basename}.${format}"
+    
+    log_message "INFO" "Transcribing video: $file"
+    
+    ffmpeg -i "$file" -vn -ar 44100 -ac 2 -ab 192k -f "$format" "$output"
+    
+    if [ $? -ne 0 ]; then
+        log_message "ERROR" "Failed to transcribe video: $file"
+        exit 1
+    fi
+    
+    if [ "$timestamp" = "true" ]; then
+        add_timestamps "$output"
+    fi
+    
+    log_message "INFO" "Transcription completed: $output"
+}
+
+# Add timestamps to transcript
+add_timestamps() {
+    local file="$1"
+    
+    check_file "$file"
+    
+    # Add timestamps using your preferred method
+    # This is just a placeholder
+    sed -i 's/^/[00:00:00] /' "$file"
+    
+    if [ $? -ne 0 ]; then
+        log_message "ERROR" "Failed to add timestamps to transcript: $file"
+        exit 1
+    fi
+    
+    log_message "INFO" "Added timestamps to transcript: $file"
+}
