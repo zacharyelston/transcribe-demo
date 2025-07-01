@@ -1,0 +1,56 @@
+# Ignore input and output files
+input/*
+output/*
+!input/.gitkeep
+!output/.gitkeep
+
+# Logs and temporary files
+*.log
+*.tmp
+*.temp
+
+# MacOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Audio files generated during processing
+*.wav
+*.mp3
+*.m4a
+*.aac
+
+# Transcript files
+*_transcript.txt
+*_audio.txt
+*.srt
+*.vtt
+*.json
+
+# Environment
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib64/
+parts/
+sdist/
+var/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# VLC generated files
+vlc-*
