@@ -22,15 +22,15 @@ fi
 usage() {
     echo "Video Transcription Tool"
     echo ""
-    echo "Usage: $0 <input_mp4_file> [output_directory] [config_file]"
+    echo "Usage: $0 <input_mp4_files> [output_directory] [config_file]"
     echo ""
     echo "Arguments:"
-    echo "  input_mp4_file     : Path to the MP4 video file"
+    echo "  input_mp4_files    : Path to the MP4 video files (separated by space)"
     echo "  output_directory   : Optional. Directory to save outputs (default: ./output)"
     echo "  config_file        : Optional. Path to config file (default: ./config/default.conf)"
     echo ""
     echo "Example:"
-    echo "  $0 video.mp4 ./my_transcripts ./config/custom.conf"
+    echo "  $0 video1.mp4 video2.mp4 ./my_transcripts ./config/custom.conf"
 }
 
 # Main function

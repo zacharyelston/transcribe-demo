@@ -114,7 +114,7 @@ transcribe_video() {
     
     log_message "INFO" "Transcribing video: $file"
     
-    ffmpeg -i "$file" -vn -ar 44100 -ac 2 -ab 192k -f "$format" "$output"
+    ffmpeg -i "$file" -vn -ar 44100 -ac 2 -ab "${quality}k" -f "$format" "$output"
     
     if [ $? -ne 0 ]; then
         log_message "ERROR" "Failed to transcribe video: $file"
