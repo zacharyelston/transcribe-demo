@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Audio Extraction Script for MacWhisper
-# Uses VLC to extract audio for use with MacWhisper app
+# Audio Extraction Script for Whisper CLI
+# Uses VLC to extract audio for use with Whisper CLI
 
 # Import utilities
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -19,7 +19,7 @@ fi
 
 # Display usage information
 usage() {
-    echo "Audio Extraction Tool for MacWhisper"
+    echo "Audio Extraction Tool for Whisper CLI"
     echo ""
     echo "Usage: $0 <input_mp4_file> [output_directory] [config_file]"
     echo ""
@@ -77,15 +77,18 @@ main() {
     fi
     
     log_message "INFO" "Audio extracted successfully: $audio_file"
-    log_message "INFO" "You can now open MacWhisper and drag this file for transcription."
+    log_message "INFO" "You can now use Whisper CLI for transcription."
     
-    # Try to open MacWhisper with the audio file
-    if [ -d "$MACWHISPER_PATH" ]; then
-        log_message "INFO" "Opening MacWhisper with the audio file..."
-        open -a MacWhisper "$audio_file"
+    # Try to transcribe with Whisper CLI
+    if command -v whisper >/dev/null 2>&1; then
+        log_message "INFO" "Transcribing with Whisper CLI..."
+        whisper transcribe "$audio_file" --config "$config_file" || {
+            log_message "ERROR" "Failed to transcribe with Whisper CLI"
+            exit 1
+        }
     else
-        log_message "WARNING" "MacWhisper not found at $MACWHISPER_PATH"
-        log_message "INFO" "You can open MacWhisper manually and drag the audio file."
+        log_message "WARNING" "Whisper CLI not found"
+        log_message "INFO" "You can manually transcribe the audio file with Whisper CLI."
     fi
     
     return 0

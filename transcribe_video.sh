@@ -93,7 +93,7 @@ main() {
     whisper_args+=("--output_format" "$OUTPUT_FORMATS")
     
     # Run whisper
-    whisper "${whisper_args[@]}"
+    $WHISPER_CLI_PATH "${whisper_args[@]}"
     
     # Check if transcription was successful
     if [ $? -eq 0 ]; then
