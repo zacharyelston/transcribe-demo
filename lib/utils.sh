@@ -36,7 +36,7 @@ check_command() {
 
 # Check if Whisper CLI is installed
 check_whisper() {
-    if ! check_command "whisper" "Please install Whisper CLI"; then
+    if ! check_command "${WHISPER_CLI_PATH}" "Please install Whisper CLI"; then
         return 1
     fi
     
@@ -103,7 +103,7 @@ log_message() {
 # Execute whisper command with error handling
 execute_whisper() {
     local params="$@"
-    whisper $params
+    "${WHISPER_CLI_PATH}" $params
     local status=$?
     
     if [ $status -ne 0 ]; then
