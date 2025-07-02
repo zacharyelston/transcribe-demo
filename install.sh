@@ -16,7 +16,7 @@ echo "Setting up your environment..."
 # Make scripts executable
 echo -e "${YELLOW}Making scripts executable...${NC}"
 chmod +x "${SCRIPT_DIR}/transcribe_video.sh"
-chmod +x "${SCRIPT_DIR}/extract_audio_for_macwhisper.sh"
+chmod +x "${SCRIPT_DIR}/extract_audio.sh"
 chmod +x "${SCRIPT_DIR}/lib/utils.sh"
 
 # Check if directories exist, create them if not
@@ -62,7 +62,7 @@ echo ""
 echo -e "${GREEN}Setup complete!${NC}"
 echo -e "You can now use the transcription tools:"
 echo -e "  - ${BLUE}./transcribe_video.sh${NC} <video_file> - Transcribe video using Whisper"
-echo -e "  - ${BLUE}./extract_audio_for_macwhisper.sh${NC} <video_file> - Extract audio for MacWhisper"
+echo -e "  - ${BLUE}./extract_audio.sh${NC} <video_file> - Extract audio for MacWhisper"
 echo ""
 echo -e "Place your videos in the ${YELLOW}input/${NC} directory for organization."
 echo -e "Transcripts and audio files will be saved to the ${YELLOW}output/${NC} directory."
