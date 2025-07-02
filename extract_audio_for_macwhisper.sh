@@ -93,3 +93,5 @@ main() {
 
 # Run the main function
 main "$@"
+
+# End of file with a newline character
