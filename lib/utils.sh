@@ -34,11 +34,9 @@ check_command() {
     return 0
 }
 
-# Check if VLC is installed
-check_vlc() {
-    if [ ! -f "${VLC_PATH}" ]; then
-        echo "Error: VLC not found at ${VLC_PATH}" >&2
-        echo "Please ensure VLC is installed" >&2
+# Check if Whisper CLI is installed
+check_whisper() {
+    if ! check_command "whisper" "Please install Whisper CLI"; then
         return 1
     fi
     
@@ -100,4 +98,18 @@ log_message() {
             echo "[${timestamp}] ${message}"
             ;;
     esac
+}
+
+# Execute whisper command with error handling
+execute_whisper() {
+    local params="$@"
+    whisper $params
+    local status=$?
+    
+    if [ $status -ne 0 ]; then
+        log_message "ERROR" "Whisper command failed with status $status"
+        return $status
+    fi
+    
+    return 0
 }
