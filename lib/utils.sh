@@ -34,6 +34,21 @@ check_command() {
     return 0
 }
 
+# Check if Whisper CLI is available
+check_whisper() {
+    if [ -n "${WHISPER_CLI_PATH}" ]; then
+        if ! command -v "${WHISPER_CLI_PATH}" &> /dev/null; then
+            echo "Error: Whisper CLI not found at ${WHISPER_CLI_PATH}" >&2
+            echo "Please ensure Whisper CLI is installed or set correctly in the configuration" >&2
+            return 1
+        fi
+    else
+        check_command "whisper"
+    fi
+    
+    return 0
+}
+
 # Check if VLC is installed
 check_vlc() {
     if [ ! -f "${VLC_PATH}" ]; then
