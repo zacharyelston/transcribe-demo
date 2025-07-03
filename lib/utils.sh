@@ -114,3 +114,16 @@ log_message() {
             ;;
     esac
 }
+
+# Check if Whisper CLI is available at WHISPER_CLI_PATH or in PATH
+check_whisper_path() {
+    if ! command -v "${WHISPER_CLI_PATH}" &> /dev/null; then
+        if ! command -v "whisper" &> /dev/null; then
+            echo "Error: Whisper CLI not found at ${WHISPER_CLI_PATH} or in PATH" >&2
+            echo "Please ensure Whisper CLI is installed or set correctly in the configuration" >&2
+            return 1
+        fi
+    fi
+    
+    return 0
+}
