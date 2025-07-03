@@ -35,7 +35,7 @@ check_command() {
     return 0
 }
 
-# Check if Whisper CLI is available
+# Check if Whisper CLI is installed and available
 check_whisper() {
     check_command "${WHISPER_CLI_PATH}"
     if [ $? -ne 0 ]; then
