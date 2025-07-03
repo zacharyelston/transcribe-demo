@@ -12,6 +12,7 @@ load_config() {
     if [ -f "$config_file" ]; then
         source "$config_file"
         echo "Loaded configuration from $config_file"
+        WHISPER_CLI_PATH="${WHISPER_CLI_PATH:-whisper}"
     else
         echo "Error: Configuration file not found: $config_file" >&2
         return 1
@@ -28,6 +29,18 @@ check_command() {
         if [ -n "$package" ]; then
             echo "Please install it using: $package" >&2
         fi
+        return 1
+    fi
+    
+    return 0
+}
+
+# Check if Whisper CLI is installed and available
+check_whisper() {
+    check_command "${WHISPER_CLI_PATH}"
+    if [ $? -ne 0 ]; then
+        echo "Error: Whisper CLI not found at ${WHISPER_CLI_PATH}" >&2
+        echo "Please ensure Whisper CLI is installed or set correctly in the configuration" >&2
         return 1
     fi
     
@@ -100,4 +113,17 @@ log_message() {
             echo "[${timestamp}] ${message}"
             ;;
     esac
+}
+
+# Check if Whisper CLI is available at WHISPER_CLI_PATH or in PATH
+check_whisper_path() {
+    if ! command -v "${WHISPER_CLI_PATH}" &> /dev/null; then
+        if ! command -v "whisper" &> /dev/null; then
+            echo "Error: Whisper CLI not found at ${WHISPER_CLI_PATH} or in PATH" >&2
+            echo "Please ensure Whisper CLI is installed or set correctly in the configuration" >&2
+            return 1
+        fi
+    fi
+    
+    return 0
 }

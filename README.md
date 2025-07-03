@@ -14,7 +14,7 @@ A collection of shell scripts for audio and video transcription with various out
 ## Scripts
 
 - `transcribe_video.sh`: Main script for transcribing video files
-- `extract_audio_for_macwhisper.sh`: Helper script to extract audio for processing
+- `extract_audio.sh`: Helper script to extract audio for processing
 - `lib/utils.sh`: Utility functions and shared code
 - `config/default.conf`: Configuration settings
 
