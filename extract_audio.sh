@@ -80,9 +80,9 @@ main() {
     log_message "INFO" "You can now open Whisper CLI and use this file for transcription."
     
     # Try to open Whisper CLI with the audio file
-    if [ -d "$WHISPER_CLI_PATH" ]; then
+    if [ -x "$WHISPER_CLI_PATH" ]; then
         log_message "INFO" "Opening Whisper CLI with the audio file..."
-        open -a WhisperCLI "$audio_file"
+        log_message "INFO" "To transcribe, run: whisper \"$audio_file\" --model base"
     else
         log_message "WARNING" "Whisper CLI not found at $WHISPER_CLI_PATH"
         log_message "INFO" "You can open Whisper CLI manually and use the audio file."
